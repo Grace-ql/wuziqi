@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="kaichang">
+    <div class="zuo"></div>
+    <span class="word">欢迎来到五子棋游戏</span>
+    <div class="you"></div>
+
+</div>
+<div class="start">
+    <img src="image/2.jpg" alt="">
+    <div class="play"><div>开始游戏</div></div>
+    <div class="exit"><div>结束游戏</div></div>
+</div>
+<img src="image/3.jpg" alt="">
+<div class="qipan">
+
+</div>
+<div class="big-box">
+   <canvas width="600" height="600" id="canvas"></canvas>
+   <div id="ai" style="cursor:pointer">
+       <div>启用人机</div>
+   </div>
+   <div class="biao bai">
+       <canvas width="80" height="80" id="bai"></canvas>
+       <img src="image/1.png" alt="">
+   </div>
+   <div class="biao hei">
+       <canvas width="80" height="80" id="hei"></canvas>
+       <img src="image/1.png" alt="">
+   </div>
+    <div class="btn reset"><div>重新开始</div></div>
+    <div class="btn rule"><div>游戏说明</div></div>
+    <div class="dis-rule">玩家将自己的棋子在横、竖，斜任意一个方向排满五个就是胜利者。为了增加游戏的趣味性，特意增加了游戏的难度，要想取胜需要加把劲哦！</div>
+    <div class="btn over"><div>人人对战</div></div>
+</div>
+<div class="alert">已经启用人机，请开始游戏</div>
+<div class="alert-renji">已经人人对战，请开始游戏</div>
+<div class="alert-h">黑棋赢了，是否愿意再来一局
+    <div class='btn'>
+    <div class="btn-q">确定</div>
+    <div class="btn-x">取消</div>
+    </div>
+ </div>
+<div class="alert-b">白棋赢了，是否愿意再来一局
+    <div class='btn'>
+    <div class="btn-q">确定</div>
+    <div class="btn-x">取消</div>
+    </div>
+</div>
+</body>
+</html>
