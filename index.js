@@ -11,16 +11,14 @@ $(function() {
     $('.kaichang').on('click', function() {
         $('.kaichang .zuo').css({
             transform: 'translateX(-100%)'
-        });
+        })
         $('.kaichang .you').css({
             transform: 'translateX(100%)'
-        });
+        })
         $('.kaichang span').css({
             transform: 'translateY(-100%)'
-        });
-        $('.kaichang').css({
-            zIndex: -10
-        });
+        })
+        $('.start .play,.exit').css('zIndex',100);
     })
     for (var i=0;i<ROW;i++){
         for(var j=0;j<ROW;j++){
@@ -241,6 +239,7 @@ $(function() {
         }
     }
     ///////////////////秒表针//////////////////
+    var date=0;
     function baimiao() {
         var canvasbai=$('#bai').get(0);
         var ctxbai=canvasbai.getContext('2d');///注意getContext中的C要大写
@@ -248,9 +247,8 @@ $(function() {
         ctxbai.save();
         ctxbai.beginPath();
         ctxbai.translate(40,40);
-        var date =new Date();
-        var s=date.getSeconds();
-        ctxbai.rotate(2*Math.PI *s /60);
+        date++;
+        ctxbai.rotate(2*Math.PI *date/60);
         ctxbai.moveTo(0,14);
         ctxbai.lineTo(0,6);
         ctxbai.moveTo(6,0);
@@ -260,6 +258,10 @@ $(function() {
         ctxbai.closePath();
         ctxbai.stroke();
         ctxbai.restore();
+        if(date===60){
+             clearInterval(t)
+             alert('时间已到，请白棋走');
+        }
     }
     function heimiao(){
         var canvashei=$('#hei').get(0);
@@ -268,27 +270,30 @@ $(function() {
         ctxhei.save();
         ctxhei.beginPath();
         ctxhei.translate(40,40);
-        var date =new Date();
-        var s=date.getSeconds();
-        ctxhei.rotate(2*Math.PI *s /60);
+        date++;
+        ctxhei.rotate(2*Math.PI *date/60);
         ctxhei.moveTo(0,14);
         ctxhei.lineTo(0,6);
         ctxhei.moveTo(6,0);
-        ctxhei.arc(0,0,6,0,2*Math.PI)
+        ctxhei.arc(0,0,6,0,2*Math.PI);
         ctxhei.moveTo(0,-6);
         ctxhei.lineTo(0,-22);
         ctxhei.closePath();
         ctxhei.stroke();
         ctxhei.restore();
-    }
-
+         if(date===60){
+             clearInterval(t)
+             alert('时间已到，请白棋走');
+           }
+    }    
    function handleclick(e) {
        var position={x:Math.round((e.offsetX-off/2)/off),
            y:Math.round((e.offsetY-off/2)/off)};
        if(blocks[v2k(position)]){return};//注意括号
        if(ai){
            drawchess(position,"#000");
-            h=setInterval(heimiao,1000)
+            clearInterval(t)
+           b=setInterval(baimiao,1000);
            if(check(position,"#000")>=5){
                $('.alert-h').animate({
                    'opacity': 1
@@ -299,6 +304,7 @@ $(function() {
                        },2000)
                    })
                });
+               clearInterval(tt)
                if(confirm("是否生成棋谱")){
                    review();
                }
@@ -306,7 +312,8 @@ $(function() {
                return;
            }
            drawchess(AI(),"#fff");
-           b=setInterval(baimiao,1000)
+           clearInterval(b);
+           t=setInterval(heimiao,1000);//若不加t相当于重新启动了一个
            if(check(AI(),"#fff")>5){
                $('.alert-b').animate({
                    'opacity': 1
@@ -317,6 +324,7 @@ $(function() {
                        },2000)
                    })
                });
+               clearInterval(tt)
                if(confirm("是否生成棋谱")){
                    review();
                }
@@ -328,7 +336,8 @@ $(function() {
        }
        if(flag){
            drawchess(position,"#000");
-           setInterval(heimiao,1000);
+           clearInterval(t)
+           b=setInterval(baimiao,1000);
            if(check(position,"#000")>=5){
                $('.alert-h').animate({
                    'opacity': 1
@@ -339,6 +348,7 @@ $(function() {
                        },2000)
                    })
                });
+               clearInterval(tt)
                if(confirm("是否生成棋谱")){
                    review();
                }
@@ -347,7 +357,8 @@ $(function() {
            }
        }else{
            drawchess(position,"#fff");
-           setInterval(baimiao,1000)
+           clearInterval(b);
+           t=setInterval(heimiao,1000);//若不加t相当于重新启动了一个
            if(check(position,"#fff")>=6){
                $('.alert-b').animate({
                    'opacity': 1
@@ -358,6 +369,7 @@ $(function() {
                        },1000)
                    })
                });
+               clearInterval(tt)
                if(confirm("是否生成棋谱")){
                    review();
                }
@@ -368,7 +380,7 @@ $(function() {
        flag=!flag;
    }
     /////////////点击事件   下棋子//////////////////////
-    $(canvas).on('click',handleclick);
+    // $(canvas).on('click',handleclick);
     $(".reset").off('click');
     $(".reset").on('click',function () {
         $(this).toggleClass('active');
@@ -376,7 +388,15 @@ $(function() {
     });
     $('.btn .btn-q').on('click',function(){
         restart();
+        jishi();
         $('.alert-h').css('display','none')
+        $('.alert-b').css('display','none')
+    })
+    $('.over-over').on('click',function(){
+    	$(this).toggleClass('active');
+        clearInterval(t)
+        clearInterval(b)
+    	clearInterval(tt)
     })
     // $(".reset").on('dblclick',restart);
     $('#ai').on('click',function () {
@@ -391,12 +411,15 @@ $(function() {
                 },2000)
             })
         });
+        // $(canvas).on('click',handleclick);
     })
     $('#ai').off('click',false);
     ///////////////////////////
     $('.play').on('click',function(){
         $('.start').addClass('animate');
-        $('.big-box').addClass('hua')
+        $('.big-box').addClass('hua');
+        $('#canvas').addClass('zhuan')
+        $('.kaichang').css('zIndex',-300)
     })
     $('.rule').on('click',function(){
         $(this).toggleClass('active');
@@ -414,5 +437,29 @@ $(function() {
            })
        });
        restart();
+      t=setInterval(heimiao,1000); 
+      jishi();
    })
+    var hei = {};
+    var bai = {};
+    var flag= true;
+    var isAi=true;
+    var time = 0;
+    var  min=0;
+    var second=0;
+    $(".jsq span").html("0:00");
+    function jishi(){
+        tt=setInterval(function(){
+            time +=1;
+            second=time%60;
+            if(time%60 == 0){
+                min = parseInt(min);
+                min += 1;
+                min = (min<10)?'0'+min:min;
+            }
+            second = (second<10)?'0'+second:second;
+            $(".jsq span").html(min +':'+second);
+
+        },1000);
+    }
 })
